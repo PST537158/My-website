@@ -1,126 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prince Singh - Portfolio</title>
+  <meta charset="UTF-8">
+  <title>Live Location Viewer</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f4f4;
-      color: #333;
-    }
-
-    header {
-      background: #1f1f1f;
-      color: white;
-      padding: 40px 20px;
+      font-family: Arial, sans-serif;
       text-align: center;
+      margin-top: 80px;
+      background-color: #f4f4f4;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
+    h1 {
+      color: #222;
     }
-
-    header p {
-      font-size: 1.2rem;
-      color: #ccc;
-    }
-
-    .content {
-      padding: 40px 20px;
-      max-width: 800px;
-      margin: auto;
-    }
-
-    .section {
-      margin-bottom: 40px;
-    }
-
-    h2 {
-      color: #1f1f1f;
-      margin-bottom: 10px;
-    }
-
-    .project, .download {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #1f1f1f;
-      color: white;
-      margin-top: 40px;
-    }
-
-    a {
+    #location {
+      font-size: 1.6em;
       color: #007acc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    a:hover {
-      text-decoration: underline;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Prince Singh</h1>
-    <p>Aspiring Developer | Student | Quant Enthusiast</p>
-  </header>
+  <h1>📍 Live Location</h1>
+  <p id="location">Fetching location...</p>
 
-  <div class="content">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <div class="section">
-      <h2>About Me</h2>
-      <p>Hello! I'm <strong>Prince Singh</strong>, a passionate student exploring mathematics, programming, and web development. I enjoy solving complex problems and building useful tools.</p>
-    </div>
+  <script>
+    // ✅ Your Firebase config
+    const firebaseConfig = {
+      databaseURL: "https://live-location-3a520-default-rtdb.asia-southeast1.firebasedatabase.app/"
+    };
 
-    <div class="section">
-      <h2>Projects</h2>
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-      <div class="project">
-        <h3>To-Do App</h3>
-        <p>A minimal to-do list app using HTML, CSS, and JavaScript. <a href="#">See Project</a></p>
-      </div>
+    // Read from "location" path
+    const locRef = database.ref("location");
 
-      <div class="project">
-        <h3>Portfolio Website</h3>
-        <p>This site you’re looking at — made with pure HTML & CSS and hosted using GitHub Pages. <a href="#">Source Code</a></p>
-      </div>
-
-    </div>
-
-    <div class="section">
-      <h2>Downloads</h2>
-
-      <div class="download">
-        <p>📥 <a href="Vaceny.xlsx" download>Download Vacancy Data (Excel)</a></p>
-        <p>📄 <a href="Placement Details 2024-25.pdf" download>placement (PDF)</a></p>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:princesinghtanwar123@gmail.com">princesinghtanwar123@gmail.com</a></p>
-      <p>GitHub: <a href="https://github.com/PST537158" target="_blank">github.com/PST537158</a></p>
-    </div>
-
-  </div>
-
-  <footer>
-    &copy; 2025 Prince Singh | Built with ❤️ and GitHub Pages
-  </footer>
+    locRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      document.getElementById("location").innerText = data || "No location received yet.";
+    });
+  </script>
 
 </body>
 </html>
